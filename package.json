@@ -1,0 +1,24 @@
+{
+  "type": "module",
+  "dependencies": {
+    "require": "^2.4.20"
+  },
+  "name": "adventcode2022",
+  "version": "1.0.0",
+  "description": "advent code source code",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "none"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Felino203/AdventCode2022.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Felino203/AdventCode2022/issues"
+  },
+  "homepage": "https://github.com/Felino203/AdventCode2022#readme"
+}
