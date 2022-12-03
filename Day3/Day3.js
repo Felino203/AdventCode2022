@@ -55,7 +55,7 @@ const alphabetValueMap = {
   Z: 52,
 };
 
-function parseInput(input) {
+function parseInput1(input) {
   let data = input.split("\r\n");
   data = data.map((present) => {
     const packageSize = present.length / 2;
@@ -64,18 +64,46 @@ function parseInput(input) {
   return data;
 }
 
-async function main() {
+function parseInput2(input) {
+  let data = input.split("\r\n");
+  const groups = [];
+  for (let i = 0; i < data.length; i += 3) {
+    groups.push([data[i], data[i + 1], data[i + 2]]);
+  }
+  return groups;
+}
+
+async function part1() {
   let input = await readFile("./Day3/input.txt");
-  const data = parseInput(input);
-  console.log(data);
-  const commonLetterMap = data.map((present) => {
+  const data = parseInput1(input);
+  const commonLetters = data.map((present) => {
     for (let i = 0; i < present[0].length; i++) {
       if (present[1].includes(present[0][i])) {
         return present[0][i];
       }
     }
   });
-  console.log(commonLetterMap.reduce((a, b) => a + alphabetValueMap[b], 0));
+  console.log(commonLetters.reduce((a, b) => a + alphabetValueMap[b], 0));
+  return commonLetters;
 }
 
-main();
+async function part2() {
+  let input = await readFile("./Day3/input.txt");
+  const data = parseInput2(input);
+  console.log(data);
+  const commonLetters = data.map((groups) => {
+    groups.sort((a, b) => b.length - a.length);
+    for (let i = 0; i < groups[0].length; i++) {
+      if (
+        groups[1].includes(groups[0][i]) &&
+        groups[2].includes(groups[0][i])
+      ) {
+        return groups[0][i];
+      }
+    }
+  });
+  console.log(commonLetters.reduce((a, b) => a + alphabetValueMap[b], 0));
+  return commonLetters;
+}
+
+part2();
