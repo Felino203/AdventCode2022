@@ -4,12 +4,13 @@ const RockPaperScissorsMap = {
   A: "rock",
   B: "paper",
   C: "scissors",
-  X: "rock",
-  Y: "paper",
-  Z: "scissors",
+  X: "lose",
+  Y: "draw",
+  Z: "win",
 };
-const PointMap = { A: 1, B: 2, C: 3, X: 1, Y: 2, Z: 3 };
+const PointMap = { rock: 1, paper: 2, scissors: 3 };
 const BeatsWho = { rock: "scissors", paper: "rock", scissors: "paper" };
+const LosesWho = { rock: "paper", paper: "scissors", scissors: "rock" };
 
 function parseInput(input) {
   input = input.split("\r\n");
@@ -24,11 +25,28 @@ async function main() {
   const data = parseInput(input);
   console.log(data);
 
-  data.forEach(pair => {
-    
-    
+  const pointsPerMatch = data.map((pair) => {
+    let points = 0;
+    let mypick;
+    const result = pair[1];
+    if (result === "lose") {
+      points += 0;
+      mypick = BeatsWho[pair[0]];
+    } else if (result === "win") {
+      points += 6;
+      mypick = LosesWho[pair[0]];
+    } else if (result === "draw") {
+      points += 3;
+      mypick = pair[0];
+    }
+    // choses which to pick to lose
+    points += PointMap[mypick];
+    return points;
   });
-
+  console.log(pointsPerMatch);
+  console.log(pointsPerMatch.reduce((a, b) => a + b, 0));
 }
+
+// Q1: 11603
 
 main();
