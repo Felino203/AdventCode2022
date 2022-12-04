@@ -12,13 +12,27 @@ function parseInput(input) {
 async function part1() {
 	let input = await readFile("./Day4/input.txt");
 	const data = parseInput(input);
-	const overlapList = data.filter((line) => {
+	const strictOverlapList = data.filter((line) => {
 		const overlaps =
 			(line[0][0] >= line[1][0] && line[0][1] <= line[1][1]) ||
 			(line[0][0] <= line[1][0] && line[0][1] >= line[1][1]);
 		return overlaps;
 	});
+	console.log(strictOverlapList.length);
+}
+
+async function part2() {
+	let input = await readFile("./Day4/input.txt");
+	const data = parseInput(input);
+	const overlapList = data.filter((line) => {
+		const overlaps =
+			(line[1][0] <= line[0][0] && line[0][0] <= line[1][1]) ||
+			(line[1][0] <= line[0][1] && line[0][1] <= line[1][1]) ||
+			(line[0][0] <= line[1][0] && line[1][0] <= line[0][1]) ||
+			(line[0][0] <= line[1][1] && line[1][1] <= line[0][1]);
+		return overlaps;
+	});
 	console.log(overlapList.length);
 }
 
-part1();
+part2();
