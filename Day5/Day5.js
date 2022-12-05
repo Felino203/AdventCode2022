@@ -37,11 +37,19 @@ function initStack(input) {
 	return stacks;
 }
 
-function modifyStack(stacks, { quantity, previous, next }) {
+function modifyStack1(stacks, { quantity, previous, next }) {
 	for (let i = 0; i < quantity; i++) {
 		const boxChar = stacks[previous - 1].pop();
 		stacks[next - 1].push(boxChar);
 	}
+}
+
+function modifyStack2(stacks, { quantity, previous, next }) {
+	const boxGroup = stacks[previous - 1].splice(
+		stacks[previous - 1].length - quantity,
+		quantity
+	);
+	stacks[next - 1] = stacks[next - 1].concat(boxGroup);
 }
 
 async function part1() {
@@ -49,7 +57,7 @@ async function part1() {
 	const { instructions, stack } = parseInput(input);
 	const stacks = initStack(stack);
 	for (const instruction of instructions) {
-		modifyStack(stacks, instruction);
+		modifyStack1(stacks, instruction);
 	}
 	console.log(
 		stacks
@@ -60,4 +68,20 @@ async function part1() {
 	);
 }
 
-part1();
+async function part2() {
+	let input = await readFile("./Day5/input.txt");
+	const { instructions, stack } = parseInput(input);
+	const stacks = initStack(stack);
+	for (const instruction of instructions) {
+		modifyStack2(stacks, instruction);
+	}
+	console.log(
+		stacks
+			.map((stack) => {
+				return stack.pop();
+			})
+			.join("")
+	);
+}
+
+part2();
