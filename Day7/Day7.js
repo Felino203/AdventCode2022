@@ -61,7 +61,7 @@ function calculateDirSizes(dir) {
 		}
 	}
 	dir.size = size;
-	if (size <= 100000 && dir.children) {
+	if (size <= 100000 && (dir.children || dir.files)) {
 		sum += size;
 	}
 	return { size: size, sum: sum };
@@ -70,8 +70,33 @@ function calculateDirSizes(dir) {
 async function part1() {
 	let input = await readFile("./Day7/input.txt");
 	const directoryTree = parseInput(input);
-	let sum = calculateDirSizes(directoryTree);
-	console.log(sum);
+	calculateDirSizes(directoryTree);
+	part2(directoryTree);
+}
+
+function mapDirectoriesSizes(dir, dirs = []) {
+	dirs.push(dir.size);
+	if (dir.children) {
+		for (const child of Object.values(dir.children)) {
+			dirs.concat(mapDirectoriesSizes(child, dirs));
+		}
+	}
+	return dirs;
+}
+
+function part2(directoryTree) {
+	const totalSize = directoryTree.children["/"].size;
+	const unusedSpace = 70000000 - totalSize;
+	const spaceToClear = 30000000 - unusedSpace;
+	console.log(spaceToClear);
+	const dirs = mapDirectoriesSizes(directoryTree);
+	console.log(dirs.sort((sizeA, sizeB) => sizeA - sizeB));
+	for (const directorySize of dirs) {
+		if (directorySize > spaceToClear) {
+			console.log(directorySize);
+			break;
+		}
+	}
 }
 
 part1();
