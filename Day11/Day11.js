@@ -34,7 +34,7 @@ function parseInput(input) {
 function operate(worryLevel, operation) {
 	switch (operation.operator) {
 		case "+":
-			worryLevel += worryLevel + parseInt(operation.operand);
+			worryLevel += parseInt(operation.operand);
 			break;
 		case "*":
 			if (operation.operand === "old") {
@@ -50,7 +50,7 @@ function operate(worryLevel, operation) {
 function monkeyInspect(monkeys, monkey) {
 	let itemWorryLevel = monkey.items.shift();
 	itemWorryLevel = operate(itemWorryLevel, monkey.operation);
-	itemWorryLevel = Math.round(itemWorryLevel / 3);
+	itemWorryLevel = Math.floor(itemWorryLevel / 3);
 	if (itemWorryLevel % monkey.divisibleBy === 0) {
 		monkeys[monkey.trueThrow].items.push(itemWorryLevel);
 	} else {
@@ -69,11 +69,15 @@ async function part1() {
 			}
 		}
 	}
+	console.log(monkeys);
 	const monkeyTimesInspected = monkeys
 		.map((info) => info.timesInspected)
 		.sort((a, b) => b - a, 0);
 	console.log(monkeyTimesInspected);
 	console.log(monkeyTimesInspected[0] * monkeyTimesInspected[1]);
 }
+
+// 63222 to high
+// 58548 to low
 
 part1();
