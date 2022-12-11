@@ -27,7 +27,7 @@ function moveHead(headCoords, instruction) {
 	}
 }
 
-function tailFollowHead(tailCoords, headCoords, visitedCoords) {
+function tailFollowHead(tailCoords, headCoords) {
 	if (isTouchingHead(tailCoords, headCoords)) {
 		return;
 	}
@@ -49,13 +49,6 @@ function tailFollowHead(tailCoords, headCoords, visitedCoords) {
 	};
 	tailCoords.x += moveVector.x;
 	tailCoords.y += moveVector.y;
-	if (
-		!visitedCoords.some(
-			(coords) => coords.x === tailCoords.x && coords.y === tailCoords.y
-		)
-	) {
-		visitedCoords.push({ ...tailCoords });
-	}
 }
 
 function isTouchingHead(tailCoords, headCoords) {
@@ -76,7 +69,45 @@ async function part1() {
 			tailFollowHead(tailCoords, headCoords, visitedCoords);
 		}
 	}
+}
+
+async function part2() {
+	let input = await readFile("./Day9/input.txt");
+	const instructions = parseInput(input);
+	const tailCoords = [
+		{ x: 0, y: 0 },
+		{ x: 0, y: 0 },
+		{ x: 0, y: 0 },
+		{ x: 0, y: 0 },
+		{ x: 0, y: 0 },
+		{ x: 0, y: 0 },
+		{ x: 0, y: 0 },
+		{ x: 0, y: 0 },
+		{ x: 0, y: 0 },
+	];
+	const headCoords = { x: 0, y: 0 };
+	const visitedCoords = [{ ...tailCoords[tailCoords.length - 1] }];
+	for (const instruction of instructions) {
+		for (let i = 0; i < instruction.steps; i++) {
+			moveHead(headCoords, instruction);
+			tailFollowHead(tailCoords[0], headCoords);
+			for (let i = 1; i < tailCoords.length; i++) {
+				tailFollowHead(tailCoords[i], tailCoords[i - 1]);
+			}
+			if (
+				!visitedCoords.some(
+					(coords) =>
+						coords.x === tailCoords[tailCoords.length - 1].x &&
+						coords.y === tailCoords[tailCoords.length - 1].y
+				)
+			) {
+				visitedCoords.push({ ...tailCoords[tailCoords.length - 1] });
+			}
+		}
+	}
 	console.log(visitedCoords.length);
 }
 
-part1();
+// part1(); //6486
+
+part2();
