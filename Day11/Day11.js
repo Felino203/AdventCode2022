@@ -48,7 +48,7 @@ function parseInput(input) {
 	});
 }
 
-function operate1(worryLevel, operation) {
+function operate(worryLevel, operation) {
 	switch (operation.operator) {
 		case "+":
 			worryLevel += parseInt(operation.operand);
@@ -94,38 +94,11 @@ async function part1() {
 	console.log(monkeyTimesInspected[0] * monkeyTimesInspected[1]);
 }
 
-function isPrime(n) {
-	if (n <= 1) return false;
-	if (n <= 3) return true;
-	if (n % 2 == 0 || n % 3 == 0) return false;
-	for (let i = 5; i * i <= n; i = i + 6)
-		if (n % i == 0 || n % (i + 2) == 0) return false;
-	return true;
-}
-
-function operate2(itemValue, operation) {
-	switch (operation.operator) {
-		case "+":
-			let number = 1;
-			itemValue.factors.forEach((a) => (number *= a));
-			number += parseInt(operation.operand);
-			itemValue.factors = getPrimeFactors(number);
-			break;
-		case "*":
-			if (operation.operand === "old") {
-				//do nothing
-			} else {
-				itemValue.factors.add(operation.operand);
-			}
-			break;
-	}
-	return itemValue;
-}
-
-function monkeyInspect2(monkeys, monkey) {
+function monkeyInspect2(monkeys, monkey, ppcm) {
 	let itemValue = monkey.items.shift();
-	itemValue = operate2(itemValue, monkey.operation);
-	if (itemValue.factors.has(monkey.divisibleBy)) {
+	itemValue = operate(itemValue, monkey.operation);
+	itemValue = itemValue % ppcm;
+	if (itemValue % monkey.divisibleBy === 0) {
 		monkeys[monkey.trueThrow].items.push(itemValue);
 	} else {
 		monkeys[monkey.falseThrow].items.push(itemValue);
@@ -136,14 +109,17 @@ function monkeyInspect2(monkeys, monkey) {
 async function part2() {
 	let input = await readFile("./Day11/input.txt");
 	const monkeys = parseInput(input);
-	for (let round = 0; round < 1000; round++) {
+	const ppcm = monkeys
+		.map((monkey) => monkey.divisibleBy)
+		.reduce((a, b) => a * b, 1);
+	console.log(ppcm);
+	for (let round = 0; round < 10000; round++) {
 		for (const monkey of monkeys) {
 			while (monkey.items.length > 0) {
-				monkeyInspect2(monkeys, monkey);
+				monkeyInspect2(monkeys, monkey, ppcm);
 			}
 		}
 	}
-	console.log(monkeys);
 	const monkeyTimesInspected = monkeys
 		.map((info) => info.timesInspected)
 		.sort((a, b) => b - a, 0);
@@ -151,4 +127,4 @@ async function part2() {
 	console.log(monkeyTimesInspected[0] * monkeyTimesInspected[1]);
 }
 
-part1();
+part2();
