@@ -204,6 +204,8 @@ function dijkstra(graph) {
 	return results;
 }
 
+// https://csis.pace.edu/~benjamin/teaching/cs627/webfiles/Astar.pdf - A* algorithm
+
 async function part1() {
 	let input = await readFile("./Day12/input.txt");
 	let data = parseInput(input);
