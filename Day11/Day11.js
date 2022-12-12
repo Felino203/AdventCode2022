@@ -27,12 +27,7 @@ function parseInput(input) {
 			items: monkeyLines[1]
 				.split(": ")[1]
 				.split(", ")
-				.map((item) => {
-					return {
-						factors: getPrimeFactors(parseInt(item)),
-						shift: 0,
-					};
-				}),
+				.map((item) => parseInt(item)),
 			operation: {
 				operator: fullOperation[0],
 				operand: fullOperation
@@ -156,4 +151,4 @@ async function part2() {
 	console.log(monkeyTimesInspected[0] * monkeyTimesInspected[1]);
 }
 
-part2();
+part1();
